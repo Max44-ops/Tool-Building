@@ -78,8 +78,7 @@ class BriefingFormatter:
         main_sections = [
             (['ki_global'], '🤖 KI Global'),
             (['europa', 'deutschland'], '🇪🇺 KI in Europa & Deutschland'),
-            (['verwaltung'], '🏛️ KI in der Öffentlichen Verwaltung'),
-            (['cybersecurity'], '🔒 KI & IT-Sicherheit'),
+            (['verwaltung'], '🏛️ KI im Öffentlichen Sektor'),
             (['regulierung'], '⚖️ KI-Regulierung & Recht'),
         ]
 

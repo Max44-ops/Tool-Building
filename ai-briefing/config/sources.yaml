@@ -1,6 +1,7 @@
 # Daily KI-Briefing - Quellen-Konfiguration
-# Fokus: KI in allen Bereichen
-# Letzte Aktualisierung: 2026-01
+# Fokus: KI in allen Bereichen inkl. Öffentlicher Sektor
+# Zeitraum: Letzte 7 Tage
+# Version: 1.3
 
 primary_sources:
   - name: "Superhuman AI"
@@ -45,10 +46,18 @@ additional_sources:
     rss_url: "https://rss.golem.de/rss.php?feed=ATOM1.0"
     filter: "ki|künstliche intelligenz|openai|chatgpt|llm|machine learning|deep learning|claude|gemini|copilot"
 
+  # Öffentliche Verwaltung / Public Sector - KI-Fokus
   - name: "eGovernment Computing"
     url: "https://www.egovernment-computing.de/"
     type: "web"
-    # KI in der öffentlichen Verwaltung
+
+  - name: "Behörden Spiegel"
+    url: "https://www.behoerden-spiegel.de/"
+    type: "web"
+
+  - name: "Tagesspiegel Background Digitalisierung"
+    url: "https://background.tagesspiegel.de/digitalisierung"
+    type: "web"
 
   # International - KI-Fokus
   - name: "TechCrunch AI"
@@ -63,7 +72,7 @@ additional_sources:
     url: "https://www.anthropic.com/news"
     type: "web"
 
-# Kategorie-Definitionen - Fokus auf KI
+# Kategorie-Definitionen - Fokus auf KI in allen Bereichen
 categories:
   ki_global:
     emoji: "🤖"
@@ -109,22 +118,15 @@ categories:
 
   verwaltung:
     emoji: "🏛️"
-    name: "KI in der Verwaltung"
+    name: "KI im Öffentlichen Sektor"
     keywords:
       - behörde
       - verwaltung
+      - öffentlich
+      - kommune
       - e-government
-      - öffentlicher dienst
-
-  cybersecurity:
-    emoji: "🔒"
-    name: "KI & Sicherheit"
-    keywords:
-      - deepfake
-      - cybersecurity
-      - ki-sicherheit
-      - manipulation
-      - desinformation
+      - public sector
+      - bürgerservice
 
   regulierung:
     emoji: "⚖️"

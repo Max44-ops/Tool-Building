@@ -27,8 +27,8 @@ class AIBriefingAgent:
         self.config_path = config_path or os.path.join(
             os.path.dirname(__file__), '..', 'config', 'sources.yaml'
         )
-        self.rss_scraper = RSSscraper(max_age_hours=48)
-        self.web_scraper = WebScraper(max_age_hours=48)
+        self.rss_scraper = RSSscraper(max_age_hours=168)  # 7 Tage
+        self.web_scraper = WebScraper(max_age_hours=168)  # 7 Tage
         self.categorizer = Categorizer()
         self.summarizer = Summarizer()
         self.formatter = BriefingFormatter()
@@ -145,7 +145,7 @@ class AIBriefingAgent:
     def run(self) -> str:
         """Führt den kompletten Briefing-Prozess aus"""
         print("=" * 60)
-        print("🤖 AI BRIEFING AGENT v1.0")
+        print("🤖 DAILY KI-BRIEFING AGENT v1.3")
         print("=" * 60)
 
         # 1. Quellen abrufen

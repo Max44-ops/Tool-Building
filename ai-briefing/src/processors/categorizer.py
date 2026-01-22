@@ -1,7 +1,7 @@
 """
 Kategorisierer für AI Briefing Agent
 Ordnet Artikel den definierten Kategorien zu
-Fokus: KI in allen Bereichen
+Fokus: KI in allen Bereichen inkl. Öffentlicher Sektor
 """
 from typing import List, Dict, Tuple
 import re
@@ -66,29 +66,19 @@ class Categorizer:
             },
             'verwaltung': {
                 'emoji': '🏛️',
-                'name': 'KI in der Verwaltung',
+                'name': 'KI im Öffentlichen Sektor',
                 'keywords': [
                     'behörde', 'verwaltung', 'kommune', 'kommunal',
                     'egov', 'e-government', 'bürger', 'amt', 'öffentlich',
                     'public sector', 'bürgerservice', 'onlinezugangsgesetz',
                     'ozg', 'smart city', 'bürgeramt', 'rathaus',
                     'fachverfahren', 'registermodernisierung',
-                    'verwaltungsdigitalisierung', 'öffentlicher dienst'
+                    'verwaltungsdigitalisierung', 'öffentlicher dienst',
+                    'bundesbehörde', 'landesbehörde', 'staatlich',
+                    'government', 'städte', 'gemeinde', 'landkreis',
+                    'ministerien', 'ämter', 'jobcenter', 'finanzamt'
                 ],
-                'priority': 3
-            },
-            'cybersecurity': {
-                'emoji': '🔒',
-                'name': 'KI & Sicherheit',
-                'keywords': [
-                    'cybersecurity', 'it-sicherheit', 'sicherheit', 'hack',
-                    'angriff', 'cyberangriff', 'ransomware', 'malware',
-                    'datenschutz', 'dsgvo', 'gdpr', 'datenleck', 'breach',
-                    'bsi', 'kritis', 'verschlüsselung', 'phishing',
-                    'deepfake', 'fake', 'manipulation', 'desinformation',
-                    'threat detection', 'security'
-                ],
-                'priority': 3
+                'priority': 2  # Höhere Priorität für Verwaltung
             },
             'regulierung': {
                 'emoji': '⚖️',
@@ -162,10 +152,9 @@ class Categorizer:
 
         # Prüfe KI-Relevanz
         if not self._has_ki_relevance(text):
-            # Artikel ohne KI-Bezug bekommen niedrige Priorität
             article['categories'] = []
             article['priority_level'] = '🟢'
-            article['primary_category'] = 'ki_global'  # Default
+            article['primary_category'] = 'ki_global'
             article['ki_relevant'] = False
             return article
 
@@ -207,20 +196,13 @@ class Categorizer:
         return article
 
     def _determine_priority(self, text: str) -> str:
-        """
-        Bestimmt die Prioritätsstufe eines Artikels
-
-        Returns:
-            '🔴' für Breaking, '🟡' für Wichtig, '🟢' für Lesenswert
-        """
+        """Bestimmt die Prioritätsstufe eines Artikels"""
         text_lower = text.lower()
 
-        # Breaking News Check
         for keyword in self.breaking_keywords:
             if keyword in text_lower:
                 return '🔴'
 
-        # Wichtige Nachrichten Check
         for keyword in self.important_keywords:
             if keyword in text_lower:
                 return '🟡'
@@ -230,13 +212,10 @@ class Categorizer:
     def categorize_batch(self, articles: List[Dict]) -> List[Dict]:
         """Kategorisiert eine Liste von Artikeln"""
         categorized = [self.categorize(article) for article in articles]
-        # Filtere nur KI-relevante Artikel
         return [a for a in categorized if a.get('ki_relevant', True)]
 
     def group_by_category(self, articles: List[Dict]) -> Dict[str, List[Dict]]:
-        """
-        Gruppiert Artikel nach ihrer primären Kategorie
-        """
+        """Gruppiert Artikel nach ihrer primären Kategorie"""
         grouped = {cat_id: [] for cat_id in self.categories.keys()}
 
         for article in articles:
