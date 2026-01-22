@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Briefing vom {{ date }} | Daily KI-Briefing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">Daily KI-Briefing</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="btn btn-primary">
+                    <span class="btn-icon">←</span>
+                    Zurück zur Übersicht
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Header -->
+        <section class="hero" style="padding: 2rem 1.5rem;">
+            <div class="hero-content">
+                <h1>KI-Briefing vom {{ date }}</h1>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-number">{{ briefing.stats.articles_total }}</span>
+                        <span class="stat-label">Artikel</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">{{ briefing.stats.sources_ok }}</span>
+                        <span class="stat-label">Quellen</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        {% if briefing.top_articles %}
+        <section class="section">
+            <div class="section-header">
+                <h2>📌 Executive Summary</h2>
+            </div>
+            <div class="summary-list">
+                {% for article in briefing.top_articles %}
+                <a href="{{ article.link }}" target="_blank" class="summary-item">
+                    <span class="summary-priority">{{ article.priority_level }}</span>
+                    <div class="summary-content">
+                        <h3>{{ article.title[:80] }}{% if article.title|length > 80 %}...{% endif %}</h3>
+                        <p>{{ article.summary[:150] if article.summary else article.description[:150] }}...</p>
+                        <span class="summary-source">{{ article.source }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Kategorien -->
+        {% for cat_id, cat_data in briefing.categories.items() %}
+        {% if cat_data.articles %}
+        <section class="section category-section">
+            <div class="section-header">
+                <h2>{{ cat_data.info.emoji }} {{ cat_data.info.name }}</h2>
+                <span class="article-count">{{ cat_data.articles|length }} Artikel</span>
+            </div>
+            <div class="articles-grid">
+                {% for article in cat_data.articles[:5] %}
+                <article class="article-card">
+                    <div class="article-header">
+                        <span class="article-priority">{{ article.priority_level }}</span>
+                        <span class="article-source">{{ article.source }}</span>
+                    </div>
+                    <h3 class="article-title">
+                        <a href="{{ article.link }}" target="_blank">
+                            {{ article.title[:100] }}{% if article.title|length > 100 %}...{% endif %}
+                        </a>
+                    </h3>
+                    <p class="article-summary">
+                        {{ article.summary[:200] if article.summary else article.description[:200] }}...
+                    </p>
+                    <a href="{{ article.link }}" target="_blank" class="article-link">
+                        Weiterlesen →
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% endfor %}
+
+        <!-- Fehlgeschlagene Quellen -->
+        {% if briefing.failed_sources %}
+        <section class="section">
+            <div class="section-header">
+                <h2>⚠️ Nicht erreichbare Quellen</h2>
+            </div>
+            <div class="failed-sources">
+                {% for source in briefing.failed_sources %}
+                <div class="failed-source-item">
+                    <strong>{{ source.source }}</strong>: {{ source.message[:80] }}...
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Daily KI-Briefing Agent v1.3</p>
+            <p class="footer-sources">
+                Generiert am {{ briefing.generated_at[:10] if briefing.generated_at else date }}
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .failed-sources {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .failed-source-item {
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</body>
+</html>
