@@ -1,7 +1,7 @@
 """
 Markdown Formatter für AI Briefing Agent
-Erstellt das finale Briefing-Output
-Fokus: KI UND Digitalisierung
+Erstellt das finale Briefing-Output mit Zusammenfassungen und Links
+Fokus: KI in allen Bereichen
 """
 from typing import List, Dict
 from datetime import datetime
@@ -13,12 +13,10 @@ class BriefingFormatter:
     def __init__(self):
         self.category_order = [
             'ki_global',
-            'digitalisierung',
             'europa',
             'deutschland',
             'verwaltung',
             'cybersecurity',
-            'infrastruktur',
             'regulierung',
             'wirtschaft',
             'forschung'
@@ -26,29 +24,19 @@ class BriefingFormatter:
 
         self.category_info = {
             'ki_global': {'emoji': '🤖', 'name': 'KI Global'},
-            'digitalisierung': {'emoji': '💻', 'name': 'Digitalisierung'},
-            'europa': {'emoji': '🇪🇺', 'name': 'Europa'},
-            'deutschland': {'emoji': '🇩🇪', 'name': 'Deutschland'},
-            'verwaltung': {'emoji': '🏛️', 'name': 'Öffentliche Verwaltung'},
-            'cybersecurity': {'emoji': '🔒', 'name': 'IT-Sicherheit & Datenschutz'},
-            'infrastruktur': {'emoji': '🌐', 'name': 'Digitale Infrastruktur'},
-            'regulierung': {'emoji': '⚖️', 'name': 'Regulierung & Gesetze'},
-            'wirtschaft': {'emoji': '💼', 'name': 'Wirtschaft & Startups'},
-            'forschung': {'emoji': '🔬', 'name': 'Forschung'}
+            'europa': {'emoji': '🇪🇺', 'name': 'KI in Europa'},
+            'deutschland': {'emoji': '🇩🇪', 'name': 'KI in Deutschland'},
+            'verwaltung': {'emoji': '🏛️', 'name': 'KI in der Verwaltung'},
+            'cybersecurity': {'emoji': '🔒', 'name': 'KI & Sicherheit'},
+            'regulierung': {'emoji': '⚖️', 'name': 'KI-Regulierung & Recht'},
+            'wirtschaft': {'emoji': '💼', 'name': 'KI in der Wirtschaft'},
+            'forschung': {'emoji': '🔬', 'name': 'KI-Forschung'}
         }
 
     def format_briefing(self, grouped_articles: Dict[str, List[Dict]],
                         stats: Dict, failed_sources: List[Dict]) -> str:
         """
         Erstellt das komplette Briefing im Markdown-Format
-
-        Args:
-            grouped_articles: Nach Kategorien gruppierte Artikel
-            stats: Statistiken (Quellen-Anzahl, Artikel-Anzahl)
-            failed_sources: Liste fehlgeschlagener Quellen
-
-        Returns:
-            Formatiertes Markdown-Briefing
         """
         now = datetime.now()
         date_str = now.strftime("%d. %B %Y").replace(
@@ -61,7 +49,7 @@ class BriefingFormatter:
 
         # Header
         output = []
-        output.append("# 🤖 KI & Digitalisierung Briefing")
+        output.append("# 🤖 Daily KI-Briefing")
         output.append(f"**{date_str}** | Quellen: {stats.get('sources_ok', 0)}/{stats.get('sources_total', 0)} | Artikel: {stats.get('articles_total', 0)}")
         output.append("")
         output.append("---")
@@ -70,32 +58,29 @@ class BriefingFormatter:
         # Executive Summary
         output.append("## 📌 Executive Summary")
         output.append("")
-        output.append("> Die wichtigsten Entwicklungen heute:")
+        output.append("> Die wichtigsten KI-Entwicklungen heute:")
         output.append("")
 
         top_articles = self._get_top_articles(grouped_articles, 5)
         for i, article in enumerate(top_articles, 1):
-            cat_emoji = article.get('categories', [{}])[0].get('emoji', '📰') if article.get('categories') else '📰'
             title = article.get('title', 'Unbekannt')
-            # Kürze den Titel wenn nötig
-            if len(title) > 80:
-                title = title[:77] + '...'
+            if len(title) > 70:
+                title = title[:67] + '...'
+            link = article.get('link', '#')
             summary_short = self._get_short_context(article)
-            output.append(f"{i}. **{title}** – {summary_short}")
+            output.append(f"{i}. **[{title}]({link})** – {summary_short}")
 
         output.append("")
         output.append("---")
         output.append("")
 
-        # Hauptkategorien - Neu strukturiert
+        # Hauptkategorien
         main_sections = [
             (['ki_global'], '🤖 KI Global'),
-            (['digitalisierung'], '💻 Digitalisierung'),
-            (['europa', 'deutschland'], '🇪🇺 Europa & 🇩🇪 Deutschland'),
-            (['verwaltung'], '🏛️ Öffentliche Verwaltung'),
-            (['cybersecurity'], '🔒 IT-Sicherheit & Datenschutz'),
-            (['infrastruktur'], '🌐 Digitale Infrastruktur'),
-            (['regulierung'], '⚖️ Regulierung & Gesetze'),
+            (['europa', 'deutschland'], '🇪🇺 KI in Europa & Deutschland'),
+            (['verwaltung'], '🏛️ KI in der Öffentlichen Verwaltung'),
+            (['cybersecurity'], '🔒 KI & IT-Sicherheit'),
+            (['regulierung'], '⚖️ KI-Regulierung & Recht'),
         ]
 
         for cat_ids, section_title in main_sections:
@@ -113,9 +98,9 @@ class BriefingFormatter:
                 priority_order = {'🔴': 0, '🟡': 1, '🟢': 2}
                 section_articles.sort(key=lambda x: priority_order.get(x.get('priority_level', '🟢'), 2))
 
-                # Zeige maximal 5 Artikel pro Sektion
+                # Zeige maximal 5 Artikel pro Sektion mit vollständiger Formatierung
                 for article in section_articles[:5]:
-                    output.append(self._format_article(article))
+                    output.append(self._format_article_full(article))
                     output.append("")
 
             output.append("---")
@@ -127,64 +112,99 @@ class BriefingFormatter:
             other_articles.extend(grouped_articles.get(cat_id, []))
 
         if other_articles:
-            output.append("## 📚 Weitere lesenswerte Artikel")
+            output.append("## 📚 Weitere KI-News: Wirtschaft & Forschung")
             output.append("")
-            output.append("| Titel | Quelle | Kategorie |")
-            output.append("|-------|--------|-----------|")
 
-            for article in other_articles[:10]:
-                title = article.get('title', 'Unbekannt')
-                if len(title) > 60:
-                    title = title[:57] + '...'
-                link = article.get('link', '#')
-                source = article.get('source', 'Unbekannt')
-                cat_emoji = article.get('categories', [{}])[0].get('emoji', '📰') if article.get('categories') else '📰'
-                output.append(f"| [{title}]({link}) | {source} | {cat_emoji} |")
+            for article in other_articles[:8]:
+                output.append(self._format_article_compact(article))
+                output.append("")
 
-            output.append("")
             output.append("---")
             output.append("")
 
         # Fehlgeschlagene Quellen
         if failed_sources:
-            output.append("## ⚠️ Hinweise")
-            output.append("")
-            output.append("Folgende Quellen konnten nicht abgerufen werden:")
+            output.append("## ⚠️ Nicht erreichbare Quellen")
             output.append("")
             for source in failed_sources:
-                output.append(f"- **{source.get('source', 'Unbekannt')}**: {source.get('message', 'Unbekannter Fehler')}")
+                msg = source.get('message', 'Unbekannter Fehler')
+                # Kürze die Fehlermeldung
+                if len(msg) > 60:
+                    msg = msg[:57] + '...'
+                output.append(f"- **{source.get('source', 'Unbekannt')}**: {msg}")
             output.append("")
             output.append("---")
             output.append("")
 
         # Footer
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        output.append(f"*Generiert: {timestamp} | AI Briefing Agent v1.1*")
+        output.append(f"*Generiert: {timestamp} | Daily KI-Briefing Agent v1.2*")
 
         return "\n".join(output)
 
-    def _format_article(self, article: Dict) -> str:
-        """Formatiert einen einzelnen Artikel"""
+    def _format_article_full(self, article: Dict) -> str:
+        """Formatiert einen Artikel mit vollständiger Zusammenfassung und Link"""
         title = article.get('title', 'Unbekannt')
         source = article.get('source', 'Unbekannt')
         priority = article.get('priority_level', '🟢')
         link = article.get('link', '#')
         summary = article.get('summary', article.get('description', ''))
 
-        # Kürze Summary wenn nötig
-        if len(summary) > 300:
-            summary = summary[:297] + '...'
+        # Bereinige und kürze Summary
+        summary = self._clean_summary(summary)
+        if len(summary) > 350:
+            summary = summary[:347] + '...'
 
         lines = []
-        lines.append(f"### {title}")
-        lines.append(f"**Quelle:** {source} | **Priorität:** {priority}")
+        lines.append(f"### {priority} {title}")
         lines.append("")
         if summary:
-            lines.append(summary)
+            lines.append(f"> {summary}")
             lines.append("")
-        lines.append(f"🔗 [Zum Artikel]({link})")
+        lines.append(f"**Quelle:** [{source}]({link})")
 
         return "\n".join(lines)
+
+    def _format_article_compact(self, article: Dict) -> str:
+        """Kompakte Formatierung für weitere Artikel"""
+        title = article.get('title', 'Unbekannt')
+        if len(title) > 70:
+            title = title[:67] + '...'
+        source = article.get('source', 'Unbekannt')
+        priority = article.get('priority_level', '🟢')
+        link = article.get('link', '#')
+        summary = article.get('summary', article.get('description', ''))
+
+        # Kurze Zusammenfassung
+        summary = self._clean_summary(summary)
+        if len(summary) > 150:
+            summary = summary[:147] + '...'
+
+        lines = []
+        lines.append(f"**{priority} [{title}]({link})** ({source})")
+        if summary:
+            lines.append(f"> {summary}")
+
+        return "\n".join(lines)
+
+    def _clean_summary(self, text: str) -> str:
+        """Bereinigt die Zusammenfassung"""
+        if not text:
+            return ''
+
+        # Entferne HTML-Entities
+        text = text.replace('&#8217;', "'").replace('&#8211;', "–")
+        text = text.replace('&amp;', '&').replace('&quot;', '"')
+
+        # Entferne "Der Artikel ... erschien zuerst auf ..."
+        if 'erschien zuerst auf' in text:
+            text = text.split('Der Artikel')[0].strip()
+
+        # Entferne doppelte Leerzeichen
+        import re
+        text = re.sub(r'\s+', ' ', text)
+
+        return text.strip()
 
     def _get_top_articles(self, grouped_articles: Dict[str, List[Dict]], count: int) -> List[Dict]:
         """Holt die Top-Artikel für die Executive Summary"""
@@ -210,6 +230,7 @@ class BriefingFormatter:
     def _get_short_context(self, article: Dict) -> str:
         """Erstellt einen kurzen Kontext-Satz für die Executive Summary"""
         summary = article.get('summary', article.get('description', ''))
+        summary = self._clean_summary(summary)
 
         if not summary:
             return article.get('source', 'Aktuelle Meldung')

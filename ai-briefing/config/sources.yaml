@@ -1,6 +1,6 @@
-# AI Briefing Sources Configuration
+# Daily KI-Briefing - Quellen-Konfiguration
+# Fokus: KI in allen Bereichen
 # Letzte Aktualisierung: 2026-01
-# Fokus: KI UND Digitalisierung
 
 primary_sources:
   - name: "Superhuman AI"
@@ -21,49 +21,36 @@ primary_sources:
     type: "rss"
     rss_url: "https://the-decoder.de/feed/"
 
-  - name: "T3n"
+  - name: "T3n KI"
     url: "https://t3n.de/"
     type: "rss"
     rss_url: "https://t3n.de/rss.xml"
-    filter: "ki|künstliche intelligenz|ai|machine learning|llm|chatgpt|openai|anthropic|digitalisierung|digital|cloud|software|saas|plattform|app|startup|tech"
+    filter: "ki|künstliche intelligenz|ai|machine learning|llm|chatgpt|openai|anthropic|claude|gpt|gemini|copilot|deep learning|neural"
 
-  - name: "Heise"
+  - name: "Heise KI"
     url: "https://www.heise.de/"
     type: "rss"
     rss_url: "https://www.heise.de/rss/heise-atom.xml"
-    filter: "ki|künstliche intelligenz|ai|digitalisierung|digital|software|cloud|it-sicherheit|cybersecurity|datenschutz|e-government|behörde"
-
-  - name: "Zeit - Digital"
-    url: "https://www.zeit.de/digital/"
-    type: "web"
-
-  - name: "Süddeutsche - Digital"
-    url: "https://www.sueddeutsche.de/digital"
-    type: "web"
+    filter: "ki|künstliche intelligenz|ai|machine learning|llm|chatgpt|openai|chatbot|deep learning|algorithmus"
 
 additional_sources:
-  # Deutschland & Europa - Erweitert für Digitalisierung
+  # Deutschland & Europa - KI-Fokus
   - name: "Netzpolitik.org"
     type: "rss"
     rss_url: "https://netzpolitik.org/feed/"
-    # Kein Filter - alle Artikel sind relevant (Netzpolitik, Digitalisierung, Überwachung)
+    filter: "ki|künstliche intelligenz|ai|algorithmus|automatisierung|deepfake|chatbot|machine learning"
 
   - name: "Golem.de"
     type: "rss"
     rss_url: "https://rss.golem.de/rss.php?feed=ATOM1.0"
-    filter: "ki|künstliche intelligenz|openai|chatgpt|llm|digitalisierung|cloud|software|cybersecurity|it-sicherheit|e-government|behörde|verwaltung"
+    filter: "ki|künstliche intelligenz|openai|chatgpt|llm|machine learning|deep learning|claude|gemini|copilot"
 
   - name: "eGovernment Computing"
     url: "https://www.egovernment-computing.de/"
     type: "web"
-    # Keine Filter - alle Artikel relevant für öffentliche Verwaltung
+    # KI in der öffentlichen Verwaltung
 
-  # EU-Regulierung & Digital Policy
-  - name: "EU Digital Strategy"
-    url: "https://digital-strategy.ec.europa.eu/en/news"
-    type: "web"
-
-  # International
+  # International - KI-Fokus
   - name: "TechCrunch AI"
     type: "rss"
     rss_url: "https://techcrunch.com/category/artificial-intelligence/feed/"
@@ -76,7 +63,7 @@ additional_sources:
     url: "https://www.anthropic.com/news"
     type: "web"
 
-# Kategorie-Definitionen - Erweitert um Digitalisierung
+# Kategorie-Definitionen - Fokus auf KI
 categories:
   ki_global:
     emoji: "🤖"
@@ -87,207 +74,82 @@ categories:
       - google ai
       - meta ai
       - mistral
-      - model
       - llm
       - gpt
       - claude
       - gemini
-      - training
-      - benchmark
+      - llama
       - chatgpt
       - copilot
-      - ai assistant
-      - large language
-      - neural network
       - deep learning
+      - machine learning
       - transformer
       - foundation model
-      - multimodal
-      - machine learning
-
-  digitalisierung:
-    emoji: "💻"
-    name: "Digitalisierung"
-    keywords:
-      - digitalisierung
-      - digital transformation
-      - digitale transformation
-      - modernisierung
-      - automatisierung
-      - workflow
-      - prozesse
-      - software
-      - saas
-      - cloud computing
-      - plattform
-      - api
-      - schnittstelle
-      - integration
-      - legacy
-      - migration
 
   europa:
     emoji: "🇪🇺"
-    name: "Europa"
+    name: "KI in Europa"
     keywords:
       - eu
       - europa
-      - brüssel
       - ai act
-      - verordnung
-      - richtlinie
-      - european
-      - commission
-      - parlament
-      - dsa
-      - dma
-      - digital services act
-      - digital markets act
+      - european commission
+      - eu ai office
 
   deutschland:
     emoji: "🇩🇪"
-    name: "Deutschland"
+    name: "KI in Deutschland"
     keywords:
       - bundesregierung
-      - bmi
-      - bitkom
       - deutschland
-      - berlin
-      - münchen
-      - deutsche
-      - bundestag
-      - ministerium
-      - bmbf
-      - bmwk
       - dfki
       - fraunhofer
-      - max-planck
-      - helmholtz
-      - bund
-      - länder
+      - ki-strategie
+      - aleph alpha
 
   verwaltung:
     emoji: "🏛️"
-    name: "Öffentliche Verwaltung"
+    name: "KI in der Verwaltung"
     keywords:
       - behörde
       - verwaltung
-      - kommune
-      - kommunal
-      - egov
       - e-government
-      - bürger
-      - amt
-      - öffentlich
-      - public sector
-      - bürgerservice
-      - onlinezugangsgesetz
-      - ozg
-      - smart city
-      - bürgeramt
-      - rathaus
-      - fachverfahren
-      - registermodernisierung
-      - bund online
+      - öffentlicher dienst
 
   cybersecurity:
     emoji: "🔒"
-    name: "IT-Sicherheit & Datenschutz"
+    name: "KI & Sicherheit"
     keywords:
+      - deepfake
       - cybersecurity
-      - it-sicherheit
-      - sicherheit
-      - hack
-      - angriff
-      - cyberangriff
-      - ransomware
-      - malware
-      - datenschutz
-      - dsgvo
-      - gdpr
-      - datenleck
-      - breach
-      - bsi
-      - kritis
-      - verschlüsselung
+      - ki-sicherheit
+      - manipulation
+      - desinformation
 
   regulierung:
     emoji: "⚖️"
-    name: "Regulierung & Recht"
+    name: "KI-Regulierung"
     keywords:
-      - gesetz
       - regulierung
       - compliance
-      - audit
-      - recht
-      - verbot
-      - vorschrift
-      - copyright
-      - urheberrecht
+      - ethik
+      - bias
       - haftung
-      - transparenz
-      - algorithmen-regulierung
-      - aufsicht
-      - verordnung
 
   wirtschaft:
     emoji: "💼"
-    name: "Wirtschaft & Startups"
+    name: "KI-Wirtschaft"
     keywords:
       - startup
       - investment
       - funding
-      - börse
-      - übernahme
-      - millionen
-      - milliarden
-      - finanzierung
-      - valuation
-      - series a
-      - series b
-      - ipo
-      - unicorn
-      - akquisition
-      - merger
-      - venture capital
-      - vc
+      - ki-unternehmen
 
   forschung:
     emoji: "🔬"
-    name: "Forschung"
+    name: "KI-Forschung"
     keywords:
-      - studie
-      - paper
       - forschung
-      - universität
-      - wissenschaft
-      - research
-      - forscher
-      - experiment
-      - arxiv
-      - peer-review
-      - publication
-      - journal
-      - konferenz
-      - neurips
-      - icml
-      - iclr
-      - cvpr
-
-  infrastruktur:
-    emoji: "🌐"
-    name: "Digitale Infrastruktur"
-    keywords:
-      - cloud
-      - rechenzentrum
-      - datacenter
-      - netz
-      - breitband
-      - glasfaser
-      - 5g
-      - infrastruktur
-      - server
-      - hosting
-      - aws
-      - azure
-      - gaia-x
+      - paper
+      - studie
+      - benchmark

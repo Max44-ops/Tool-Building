@@ -1,16 +1,26 @@
 """
 Kategorisierer für AI Briefing Agent
 Ordnet Artikel den definierten Kategorien zu
-Fokus: KI UND Digitalisierung
+Fokus: KI in allen Bereichen
 """
 from typing import List, Dict, Tuple
 import re
 
 
 class Categorizer:
-    """Kategorisiert Artikel nach Themengebieten"""
+    """Kategorisiert Artikel nach KI-Themengebieten"""
 
     def __init__(self):
+        # KI-Basis-Keywords die in allen Kategorien relevant sind
+        self.ki_base_keywords = [
+            'ki', 'ai', 'künstliche intelligenz', 'artificial intelligence',
+            'machine learning', 'maschinelles lernen', 'deep learning',
+            'llm', 'large language model', 'sprachmodell', 'chatbot',
+            'gpt', 'claude', 'gemini', 'llama', 'mistral',
+            'openai', 'anthropic', 'deepmind', 'neural', 'algorithmus',
+            'automatisierung', 'copilot', 'agent', 'reasoning'
+        ]
+
         self.categories = {
             'ki_global': {
                 'emoji': '🤖',
@@ -22,113 +32,98 @@ class Categorizer:
                     'large language', 'neural network', 'deep learning',
                     'transformer', 'foundation model', 'multimodal',
                     'gpt-4', 'gpt-5', 'opus', 'sonnet', 'machine learning',
-                    'ki-modell', 'sprachmodell', 'reasoning'
+                    'ki-modell', 'sprachmodell', 'reasoning', 'inference',
+                    'parameter', 'token', 'context window', 'fine-tuning',
+                    'rlhf', 'alignment', 'safety', 'jailbreak'
                 ],
                 'priority': 1
             },
-            'digitalisierung': {
-                'emoji': '💻',
-                'name': 'Digitalisierung',
-                'keywords': [
-                    'digitalisierung', 'digital transformation', 'digitale transformation',
-                    'modernisierung', 'automatisierung', 'workflow', 'prozesse',
-                    'software', 'saas', 'cloud computing', 'plattform', 'api',
-                    'schnittstelle', 'integration', 'legacy', 'migration',
-                    'digital first', 'paperless', 'low-code', 'no-code'
-                ],
-                'priority': 2
-            },
             'europa': {
                 'emoji': '🇪🇺',
-                'name': 'Europa',
+                'name': 'KI in Europa',
                 'keywords': [
                     'eu', 'europa', 'brüssel', 'ai act', 'verordnung',
                     'richtlinie', 'european', 'commission', 'parlament',
                     'europäisch', 'eu-kommission', 'union', 'straßburg',
                     'ursula', 'von der leyen', 'breton', 'vestager',
-                    'dsa', 'dma', 'digital services act', 'digital markets act'
+                    'dsa', 'dma', 'digital services act', 'digital markets act',
+                    'eu ai office', 'hochrisiko', 'sandbox'
                 ],
                 'priority': 2
             },
             'deutschland': {
                 'emoji': '🇩🇪',
-                'name': 'Deutschland',
+                'name': 'KI in Deutschland',
                 'keywords': [
                     'bundesregierung', 'bmi', 'bitkom', 'deutschland',
                     'berlin', 'münchen', 'deutsche', 'bundestag',
                     'ministerium', 'bundesminister', 'bmbf', 'bmwk',
                     'dfki', 'fraunhofer', 'max-planck', 'helmholtz',
-                    'bund', 'länder', 'landesregierung'
+                    'bund', 'länder', 'landesregierung', 'ki-strategie',
+                    'aleph alpha', 'deepl'
                 ],
                 'priority': 2
             },
             'verwaltung': {
                 'emoji': '🏛️',
-                'name': 'Öffentliche Verwaltung',
+                'name': 'KI in der Verwaltung',
                 'keywords': [
                     'behörde', 'verwaltung', 'kommune', 'kommunal',
                     'egov', 'e-government', 'bürger', 'amt', 'öffentlich',
                     'public sector', 'bürgerservice', 'onlinezugangsgesetz',
                     'ozg', 'smart city', 'bürgeramt', 'rathaus',
-                    'fachverfahren', 'registermodernisierung', 'bund online',
+                    'fachverfahren', 'registermodernisierung',
                     'verwaltungsdigitalisierung', 'öffentlicher dienst'
                 ],
                 'priority': 3
             },
             'cybersecurity': {
                 'emoji': '🔒',
-                'name': 'IT-Sicherheit & Datenschutz',
+                'name': 'KI & Sicherheit',
                 'keywords': [
                     'cybersecurity', 'it-sicherheit', 'sicherheit', 'hack',
                     'angriff', 'cyberangriff', 'ransomware', 'malware',
                     'datenschutz', 'dsgvo', 'gdpr', 'datenleck', 'breach',
                     'bsi', 'kritis', 'verschlüsselung', 'phishing',
-                    'vulnerability', 'zero-day', 'firewall', 'authentifizierung'
+                    'deepfake', 'fake', 'manipulation', 'desinformation',
+                    'threat detection', 'security'
                 ],
                 'priority': 3
             },
             'regulierung': {
                 'emoji': '⚖️',
-                'name': 'Regulierung & Recht',
+                'name': 'KI-Regulierung & Recht',
                 'keywords': [
                     'gesetz', 'regulierung', 'compliance', 'audit',
                     'recht', 'verbot', 'vorschrift', 'copyright',
                     'urheberrecht', 'haftung', 'transparenz',
                     'algorithmen-regulierung', 'aufsicht', 'verordnung',
-                    'rechtlich', 'gerichtshof', 'urteil', 'klage'
+                    'rechtlich', 'gerichtshof', 'urteil', 'klage',
+                    'ethik', 'bias', 'diskriminierung', 'fairness'
                 ],
                 'priority': 3
             },
-            'infrastruktur': {
-                'emoji': '🌐',
-                'name': 'Digitale Infrastruktur',
-                'keywords': [
-                    'cloud', 'rechenzentrum', 'datacenter', 'netz',
-                    'breitband', 'glasfaser', '5g', 'infrastruktur',
-                    'server', 'hosting', 'aws', 'azure', 'gaia-x',
-                    'backbone', 'bandbreite', 'latenz', 'edge computing'
-                ],
-                'priority': 4
-            },
             'wirtschaft': {
                 'emoji': '💼',
-                'name': 'Wirtschaft & Startups',
+                'name': 'KI in der Wirtschaft',
                 'keywords': [
                     'startup', 'investment', 'funding', 'börse', 'übernahme',
                     'millionen', 'milliarden', 'finanzierung', 'valuation',
                     'series a', 'series b', 'ipo', 'unicorn', 'akquisition',
-                    'merger', 'venture capital', 'vc', 'gründer'
+                    'merger', 'venture capital', 'vc', 'gründer',
+                    'enterprise', 'b2b', 'saas'
                 ],
                 'priority': 4
             },
             'forschung': {
                 'emoji': '🔬',
-                'name': 'Forschung',
+                'name': 'KI-Forschung',
                 'keywords': [
                     'studie', 'paper', 'forschung', 'universität',
                     'wissenschaft', 'research', 'forscher', 'experiment',
                     'arxiv', 'peer-review', 'publication', 'journal',
-                    'konferenz', 'neurips', 'icml', 'iclr', 'cvpr'
+                    'konferenz', 'neurips', 'icml', 'iclr', 'cvpr',
+                    'benchmark', 'evaluation', 'sota', 'state of the art'
                 ],
                 'priority': 5
             }
@@ -140,7 +135,8 @@ class Categorizer:
             'neu', 'new', 'breaking', 'exklusiv', 'erstmals', 'revolutionär',
             'durchbruch', 'breakthrough', 'milestone', 'meilenstein',
             'gpt-5', 'claude 4', 'gemini 2', 'startet', 'einführung',
-            'cyberangriff', 'datenleck', 'hack', 'sicherheitslücke'
+            'cyberangriff', 'datenleck', 'hack', 'sicherheitslücke',
+            'billion', 'milliarden parameter'
         ]
 
         # Keywords für wichtige Nachrichten
@@ -148,20 +144,32 @@ class Categorizer:
             'update', 'studie zeigt', 'analyse', 'report', 'bericht',
             'warnung', 'kritik', 'bedenken', 'herausforderung',
             'partnerschaft', 'kooperation', 'zusammenarbeit',
-            'strategie', 'roadmap', 'reform', 'änderung'
+            'strategie', 'roadmap', 'reform', 'änderung',
+            'compliance', 'regulierung', 'verordnung'
         ]
+
+    def _has_ki_relevance(self, text: str) -> bool:
+        """Prüft ob der Artikel KI-relevant ist"""
+        text_lower = text.lower()
+        return any(kw in text_lower for kw in self.ki_base_keywords)
 
     def categorize(self, article: Dict) -> Dict:
         """
         Kategorisiert einen einzelnen Artikel
-
-        Args:
-            article: Artikel-Dictionary mit title, description
-
-        Returns:
-            Artikel mit zusätzlichen Feldern: categories, priority_level
+        Nur Artikel mit KI-Bezug werden kategorisiert
         """
         text = (article.get('title', '') + ' ' + article.get('description', '')).lower()
+
+        # Prüfe KI-Relevanz
+        if not self._has_ki_relevance(text):
+            # Artikel ohne KI-Bezug bekommen niedrige Priorität
+            article['categories'] = []
+            article['priority_level'] = '🟢'
+            article['primary_category'] = 'ki_global'  # Default
+            article['ki_relevant'] = False
+            return article
+
+        article['ki_relevant'] = True
 
         # Kategorien finden
         matched_categories = []
@@ -194,7 +202,7 @@ class Categorizer:
         if unique_categories:
             article['primary_category'] = unique_categories[0]['id']
         else:
-            article['primary_category'] = 'digitalisierung'  # Default für allgemeine Tech-News
+            article['primary_category'] = 'ki_global'
 
         return article
 
@@ -221,19 +229,18 @@ class Categorizer:
 
     def categorize_batch(self, articles: List[Dict]) -> List[Dict]:
         """Kategorisiert eine Liste von Artikeln"""
-        return [self.categorize(article) for article in articles]
+        categorized = [self.categorize(article) for article in articles]
+        # Filtere nur KI-relevante Artikel
+        return [a for a in categorized if a.get('ki_relevant', True)]
 
     def group_by_category(self, articles: List[Dict]) -> Dict[str, List[Dict]]:
         """
         Gruppiert Artikel nach ihrer primären Kategorie
-
-        Returns:
-            Dictionary mit Kategorie-IDs als Keys und Artikel-Listen als Values
         """
         grouped = {cat_id: [] for cat_id in self.categories.keys()}
 
         for article in articles:
-            primary_cat = article.get('primary_category', 'digitalisierung')
+            primary_cat = article.get('primary_category', 'ki_global')
             if primary_cat in grouped:
                 grouped[primary_cat].append(article)
 
