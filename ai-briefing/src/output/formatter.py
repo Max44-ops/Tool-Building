@@ -1,6 +1,7 @@
 """
 Markdown Formatter für AI Briefing Agent
 Erstellt das finale Briefing-Output
+Fokus: KI UND Digitalisierung
 """
 from typing import List, Dict
 from datetime import datetime
@@ -12,9 +13,12 @@ class BriefingFormatter:
     def __init__(self):
         self.category_order = [
             'ki_global',
+            'digitalisierung',
             'europa',
             'deutschland',
             'verwaltung',
+            'cybersecurity',
+            'infrastruktur',
             'regulierung',
             'wirtschaft',
             'forschung'
@@ -22,9 +26,12 @@ class BriefingFormatter:
 
         self.category_info = {
             'ki_global': {'emoji': '🤖', 'name': 'KI Global'},
+            'digitalisierung': {'emoji': '💻', 'name': 'Digitalisierung'},
             'europa': {'emoji': '🇪🇺', 'name': 'Europa'},
             'deutschland': {'emoji': '🇩🇪', 'name': 'Deutschland'},
             'verwaltung': {'emoji': '🏛️', 'name': 'Öffentliche Verwaltung'},
+            'cybersecurity': {'emoji': '🔒', 'name': 'IT-Sicherheit & Datenschutz'},
+            'infrastruktur': {'emoji': '🌐', 'name': 'Digitale Infrastruktur'},
             'regulierung': {'emoji': '⚖️', 'name': 'Regulierung & Gesetze'},
             'wirtschaft': {'emoji': '💼', 'name': 'Wirtschaft & Startups'},
             'forschung': {'emoji': '🔬', 'name': 'Forschung'}
@@ -54,7 +61,7 @@ class BriefingFormatter:
 
         # Header
         output = []
-        output.append("# 🤖 KI & Tech Briefing")
+        output.append("# 🤖 KI & Digitalisierung Briefing")
         output.append(f"**{date_str}** | Quellen: {stats.get('sources_ok', 0)}/{stats.get('sources_total', 0)} | Artikel: {stats.get('articles_total', 0)}")
         output.append("")
         output.append("---")
@@ -80,16 +87,18 @@ class BriefingFormatter:
         output.append("---")
         output.append("")
 
-        # Hauptkategorien
-        # Kombiniere Europa und Deutschland
-        combined_sections = [
+        # Hauptkategorien - Neu strukturiert
+        main_sections = [
             (['ki_global'], '🤖 KI Global'),
+            (['digitalisierung'], '💻 Digitalisierung'),
             (['europa', 'deutschland'], '🇪🇺 Europa & 🇩🇪 Deutschland'),
             (['verwaltung'], '🏛️ Öffentliche Verwaltung'),
+            (['cybersecurity'], '🔒 IT-Sicherheit & Datenschutz'),
+            (['infrastruktur'], '🌐 Digitale Infrastruktur'),
             (['regulierung'], '⚖️ Regulierung & Gesetze'),
         ]
 
-        for cat_ids, section_title in combined_sections:
+        for cat_ids, section_title in main_sections:
             section_articles = []
             for cat_id in cat_ids:
                 section_articles.extend(grouped_articles.get(cat_id, []))
@@ -150,7 +159,7 @@ class BriefingFormatter:
 
         # Footer
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-        output.append(f"*Generiert: {timestamp} | AI Briefing Agent v1.0*")
+        output.append(f"*Generiert: {timestamp} | AI Briefing Agent v1.1*")
 
         return "\n".join(output)
 
