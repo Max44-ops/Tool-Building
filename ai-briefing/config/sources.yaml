@@ -1,0 +1,180 @@
+# AI Briefing Sources Configuration
+# Letzte Aktualisierung: 2026-01
+
+primary_sources:
+  - name: "Superhuman AI"
+    url: "https://www.superhuman.ai/"
+    type: "web"
+
+  - name: "DeepLearning.AI - The Batch"
+    url: "https://www.deeplearning.ai/the-batch/"
+    type: "web"
+
+  - name: "EU AI Act Newsletter"
+    url: "https://artificialintelligenceact.substack.com/"
+    type: "substack"
+    rss_url: "https://artificialintelligenceact.substack.com/feed"
+
+  - name: "The Decoder"
+    url: "https://the-decoder.de/"
+    type: "rss"
+    rss_url: "https://the-decoder.de/feed/"
+
+  - name: "T3n"
+    url: "https://t3n.de/"
+    type: "rss"
+    rss_url: "https://t3n.de/rss.xml"
+    filter: "ki|künstliche intelligenz|ai|machine learning|llm|chatgpt|openai|anthropic"
+
+  - name: "Heise KI"
+    url: "https://www.heise.de/thema/Kuenstliche-Intelligenz"
+    type: "rss"
+    rss_url: "https://www.heise.de/rss/heise-atom.xml"
+    filter: "ki|künstliche intelligenz|ai|machine learning|llm|chatgpt"
+
+  - name: "Zeit - KI"
+    url: "https://www.zeit.de/thema/kuenstliche-intelligenz"
+    type: "web"
+
+  - name: "Süddeutsche - KI"
+    url: "https://www.sueddeutsche.de/thema/K%C3%BCnstliche_Intelligenz"
+    type: "web"
+
+additional_sources:
+  # Deutschland & Europa
+  - name: "Netzpolitik.org"
+    type: "rss"
+    rss_url: "https://netzpolitik.org/feed/"
+    filter: "ki|algorithmen|automatisierung|künstliche intelligenz"
+
+  - name: "Golem.de"
+    type: "rss"
+    rss_url: "https://rss.golem.de/rss.php?feed=ATOM1.0"
+    filter: "ki|künstliche intelligenz|openai|chatgpt|llm|machine learning"
+
+  - name: "eGovernment Computing"
+    url: "https://www.egovernment-computing.de/"
+    type: "web"
+
+  # EU-Regulierung
+  - name: "EU Digital Strategy"
+    url: "https://digital-strategy.ec.europa.eu/en/news"
+    type: "web"
+
+  # International (Top 3)
+  - name: "TechCrunch AI"
+    type: "rss"
+    rss_url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+
+  - name: "The Verge AI"
+    type: "rss"
+    rss_url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+
+  - name: "Anthropic News"
+    url: "https://www.anthropic.com/news"
+    type: "web"
+
+# Kategorie-Definitionen
+categories:
+  ki_global:
+    emoji: "🤖"
+    name: "KI Global"
+    keywords:
+      - openai
+      - anthropic
+      - google
+      - meta
+      - model
+      - llm
+      - gpt
+      - claude
+      - gemini
+      - training
+      - benchmark
+      - chatgpt
+      - copilot
+      - ai assistant
+
+  europa:
+    emoji: "🇪🇺"
+    name: "Europa"
+    keywords:
+      - eu
+      - europa
+      - brüssel
+      - ai act
+      - verordnung
+      - richtlinie
+      - european
+      - commission
+      - parlament
+
+  deutschland:
+    emoji: "🇩🇪"
+    name: "Deutschland"
+    keywords:
+      - bundesregierung
+      - bmi
+      - bitkom
+      - deutschland
+      - berlin
+      - münchen
+      - deutsche
+      - bundestag
+      - ministerium
+
+  verwaltung:
+    emoji: "🏛️"
+    name: "Öffentliche Verwaltung"
+    keywords:
+      - behörde
+      - verwaltung
+      - kommune
+      - digitalisierung
+      - egov
+      - bürger
+      - amt
+      - öffentlich
+      - public sector
+
+  regulierung:
+    emoji: "⚖️"
+    name: "Regulierung & Recht"
+    keywords:
+      - gesetz
+      - regulierung
+      - datenschutz
+      - dsgvo
+      - compliance
+      - audit
+      - recht
+      - verbot
+      - vorschrift
+      - gdpr
+
+  wirtschaft:
+    emoji: "💼"
+    name: "Wirtschaft & Startups"
+    keywords:
+      - startup
+      - investment
+      - funding
+      - börse
+      - übernahme
+      - millionen
+      - milliarden
+      - finanzierung
+      - valuation
+
+  forschung:
+    emoji: "🔬"
+    name: "Forschung"
+    keywords:
+      - studie
+      - paper
+      - forschung
+      - universität
+      - wissenschaft
+      - research
+      - forscher
+      - experiment
