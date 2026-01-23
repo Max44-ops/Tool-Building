@@ -1,0 +1,15 @@
+{
+  "outputStyle": "strategy-consultant",
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Glob",
+      "Grep"
+    ]
+  },
+  "env": {
+    "CLAUDE_CONSULTING_MODE": "true"
+  }
+}
