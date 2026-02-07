@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fehler | Daily KI-Briefing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">Daily KI-Briefing</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="section empty-state">
+            <div class="empty-content">
+                <span class="empty-icon">❌</span>
+                <h2>{{ message }}</h2>
+                <p>Das angeforderte Briefing konnte nicht gefunden werden.</p>
+                <a href="/" class="btn btn-primary btn-large">
+                    <span class="btn-icon">←</span>
+                    Zurück zur Startseite
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Daily KI-Briefing Agent v1.3</p>
+        </div>
+    </footer>
+</body>
+</html>

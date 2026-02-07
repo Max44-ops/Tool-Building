@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily KI-Briefing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">Daily KI-Briefing</span>
+            </a>
+            <div class="nav-actions">
+                <button id="generateBtn" class="btn btn-primary">
+                    <span class="btn-icon">🔄</span>
+                    Neues Briefing generieren
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Ihr tägliches KI-Briefing</h1>
+                <p class="hero-subtitle">
+                    Alle wichtigen KI-Nachrichten aus Europa, Deutschland und der Welt –
+                    automatisch zusammengestellt und kategorisiert.
+                </p>
+                <div class="hero-stats">
+                    {% if current_briefing %}
+                    <div class="stat-card">
+                        <span class="stat-number">{{ current_briefing.stats.articles_total }}</span>
+                        <span class="stat-label">Artikel heute</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">{{ current_briefing.stats.sources_ok }}</span>
+                        <span class="stat-label">Quellen</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">7</span>
+                        <span class="stat-label">Kategorien</span>
+                    </div>
+                    {% else %}
+                    <div class="stat-card">
+                        <span class="stat-number">--</span>
+                        <span class="stat-label">Noch kein Briefing</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>Generiere Briefing...</p>
+                <p class="loading-subtitle">Dies kann bis zu 2 Minuten dauern</p>
+            </div>
+        </div>
+
+        {% if current_briefing %}
+        <!-- Executive Summary -->
+        <section class="section">
+            <div class="section-header">
+                <h2>📌 Executive Summary</h2>
+                <span class="section-date">{{ current_briefing.date }}</span>
+            </div>
+            <div class="summary-list">
+                {% for article in current_briefing.top_articles %}
+                <a href="{{ article.link }}" target="_blank" class="summary-item">
+                    <span class="summary-priority">{{ article.priority_level }}</span>
+                    <div class="summary-content">
+                        <h3>{{ article.title[:80] }}{% if article.title|length > 80 %}...{% endif %}</h3>
+                        <p>{{ article.summary[:150] if article.summary else article.description[:150] }}...</p>
+                        <span class="summary-source">{{ article.source }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Kategorien -->
+        {% for cat_id, cat_data in current_briefing.categories.items() %}
+        {% if cat_data.articles %}
+        <section class="section category-section">
+            <div class="section-header">
+                <h2>{{ cat_data.info.emoji }} {{ cat_data.info.name }}</h2>
+                <span class="article-count">{{ cat_data.articles|length }} Artikel</span>
+            </div>
+            <div class="articles-grid">
+                {% for article in cat_data.articles[:5] %}
+                <article class="article-card">
+                    <div class="article-header">
+                        <span class="article-priority {{ 'priority-high' if article.priority_level == '🔴' else 'priority-medium' if article.priority_level == '🟡' else 'priority-low' }}">
+                            {{ article.priority_level }}
+                        </span>
+                        <span class="article-source">{{ article.source }}</span>
+                    </div>
+                    <h3 class="article-title">
+                        <a href="{{ article.link }}" target="_blank">
+                            {{ article.title[:100] }}{% if article.title|length > 100 %}...{% endif %}
+                        </a>
+                    </h3>
+                    <p class="article-summary">
+                        {{ article.summary[:200] if article.summary else article.description[:200] }}{% if (article.summary and article.summary|length > 200) or (article.description and article.description|length > 200) %}...{% endif %}
+                    </p>
+                    <a href="{{ article.link }}" target="_blank" class="article-link">
+                        Weiterlesen →
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% endfor %}
+
+        {% else %}
+        <!-- No Briefing Yet -->
+        <section class="section empty-state">
+            <div class="empty-content">
+                <span class="empty-icon">📰</span>
+                <h2>Noch kein Briefing für heute</h2>
+                <p>Klicken Sie auf "Neues Briefing generieren" um das aktuelle KI-Briefing zu erstellen.</p>
+                <button id="generateBtnEmpty" class="btn btn-primary btn-large">
+                    <span class="btn-icon">🔄</span>
+                    Jetzt Briefing generieren
+                </button>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Archiv -->
+        {% if briefings|length > 1 %}
+        <section class="section archive-section">
+            <div class="section-header">
+                <h2>📚 Briefing-Archiv</h2>
+            </div>
+            <div class="archive-grid">
+                {% for briefing in briefings %}
+                {% if briefing.date != today %}
+                <a href="/briefing/{{ briefing.date }}" class="archive-card">
+                    <span class="archive-date">{{ briefing.display_date }}</span>
+                    <span class="archive-arrow">→</span>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Daily KI-Briefing Agent v1.3</p>
+            <p class="footer-sources">
+                Quellen: The Decoder, T3n, Netzpolitik, TechCrunch AI, Anthropic News, EU AI Act Newsletter, eGovernment Computing u.a.
+            </p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
